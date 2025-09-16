@@ -46,7 +46,7 @@ export class BookHistoryController {
   @Get()
   @ApiBearerAuth()
   findAll() {
-    return this.bookHistoryService.findAll();
+    return this.bookHistoryService.findAll({relations:{book:true, user:true}});
   }
 
   @SwagSuccessRes('function for get book history by id')
@@ -55,7 +55,7 @@ export class BookHistoryController {
   @Get(':id')
   @ApiBearerAuth()
   findOne(@Param('id') id: string) {
-    return this.bookHistoryService.findOneById(id);
+    return this.bookHistoryService.findOneById(id, {relations:{book:true, user:true}});
   }
 
   @SwagSuccessRes('function for updating book history')

@@ -106,7 +106,7 @@ export class UsersController {
   @Get(':id')
   @ApiBearerAuth()
   findOne(@Param('id') id: string) {
-    return this.usersService.findOneById(id);
+    return this.usersService.findOneById(id, {relations:{borrows:true, book_history:true}});
   }
 
   @SwagSuccessRes('update users')

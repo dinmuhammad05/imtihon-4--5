@@ -44,7 +44,7 @@ export class BorrowController {
   @Get('all')
   @ApiBearerAuth()
   findAll() {
-    return this.borrowService.findAll();
+    return this.borrowService.findAll({relations:{book:true, user:true}});
   }
 
   @SwagSuccessRes('get  borrow by Id ')

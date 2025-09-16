@@ -52,7 +52,7 @@ export class BookController {
   @RolesDec('public')
   @Get('all')
   findAll() {
-    return this.bookService.findAll();
+    return this.bookService.findAll({relations:{book_histories:true, borrows:true}});
   }
 
   @SwagSuccessRes('function for get books by id')
@@ -60,7 +60,7 @@ export class BookController {
   @RolesDec('public')
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.bookService.findOneById(id);
+    return this.bookService.findOneById(id, {relations:{book_histories:true, borrows:true}});
   }
 
   @SwagSuccessRes('function for updating books')
