@@ -23,7 +23,7 @@ export class BookEntity extends BaseEntity {
   })
   borrows: BorrowEntity[];
 
-  @OneToMany(() => BookHistoryEntity, (history) => history, {
+  @OneToMany(() => BookHistoryEntity, (history) => history.book, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })

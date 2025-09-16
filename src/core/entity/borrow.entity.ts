@@ -17,10 +17,10 @@ export class BorrowEntity extends BaseEntity {
   @Column({ type: 'boolean' })
   overdue: Boolean;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid',nullable: false })
   userId: string;
 
-   @Column({ type: 'uuid' })
+   @Column({ type: 'uuid', nullable: false })
   bookId: string;
 
   @ManyToOne(() => UserEntity, (user) => user.borrows, {

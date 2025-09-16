@@ -16,10 +16,10 @@ export class BookHistoryEntity extends BaseEntity {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', nullable: false })
   bookId: string;
 
-   @Column({ type: 'uuid' })
+   @Column({ type: 'uuid', nullable: false })
   userId: string;
 
   @ManyToOne(() => UserEntity, (user) => user.book_history, {
