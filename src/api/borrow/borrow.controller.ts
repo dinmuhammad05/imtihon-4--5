@@ -22,6 +22,7 @@ import {
 } from 'src/common/decorator/swag-res-decorator';
 import { GetRequestUser } from 'src/common/decorator/getj-req-decorator';
 import { type IPayload } from 'src/common/interface/payload';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard, RolesGuard)
 @Controller('borrow')
@@ -32,6 +33,7 @@ export class BorrowController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN, Roles.READER)
   @Post()
+  @ApiBearerAuth()
   create(@Body() createBorrowDto: CreateBorrowDto) {
     return this.borrowService.createBorrow(createBorrowDto);
   }
@@ -40,6 +42,7 @@ export class BorrowController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN, Roles.LIBRARIAN)
   @Get('all')
+  @ApiBearerAuth()
   findAll() {
     return this.borrowService.findAll();
   }
@@ -48,6 +51,7 @@ export class BorrowController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN, Roles.READER)
   @Get(':id')
+  @ApiBearerAuth()
   findOne(@Param('id') id: string, @GetRequestUser('user') user: IPayload) {
     return this.borrowService.findone(id, user, {
       relations: { book: true, user: true },
@@ -56,7 +60,9 @@ export class BorrowController {
 
   @SwagSuccessRes('update borrow ')
   @SwagFailedRes()
+  @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Patch(':id')
+  @ApiBearerAuth()
   update(@Param('id') id: string, @Body() updateBorrowDto: UpdateBorrowDto) {
     return this.borrowService.update(id, updateBorrowDto);
   }
@@ -65,6 +71,7 @@ export class BorrowController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Delete(':id')
+  @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.borrowService.remove(id);
   }

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { BookHistoryService } from './book-history.service';
 import { CreateBookHistoryDto } from './dto/create-book-history.dto';
@@ -17,7 +18,11 @@ import {
   SwagFailedRes,
   SwagSuccessRes,
 } from 'src/common/decorator/swag-res-decorator';
+import { AuthGuard } from 'src/common/guard/auth.guard';
+import { RolesGuard } from 'src/common/guard/roles.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@UseGuards(AuthGuard, RolesGuard)
 @Controller('book-history')
 export class BookHistoryController {
   constructor(private readonly bookHistoryService: BookHistoryService) {}
@@ -30,6 +35,7 @@ export class BookHistoryController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Post()
+  @ApiBearerAuth()
   create(@Body() createBookHistoryDto: CreateBookHistoryDto) {
     return this.bookHistoryService.create(createBookHistoryDto);
   }
@@ -38,6 +44,7 @@ export class BookHistoryController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Get()
+  @ApiBearerAuth()
   findAll() {
     return this.bookHistoryService.findAll();
   }
@@ -46,6 +53,7 @@ export class BookHistoryController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Get(':id')
+  @ApiBearerAuth()
   findOne(@Param('id') id: string) {
     return this.bookHistoryService.findOneById(id);
   }
@@ -54,6 +62,7 @@ export class BookHistoryController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Patch(':id')
+  @ApiBearerAuth()
   update(
     @Param('id') id: string,
     @Body() updateBookHistoryDto: UpdateBookHistoryDto,
@@ -65,6 +74,7 @@ export class BookHistoryController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Delete(':id')
+  @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.bookHistoryService.remove(id);
   }

@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
@@ -19,7 +20,11 @@ import {
   SwagFailedRes,
   SwagSuccessRes,
 } from 'src/common/decorator/swag-res-decorator';
+import { AuthGuard } from 'src/common/guard/auth.guard';
+import { RolesGuard } from 'src/common/guard/roles.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@UseGuards(AuthGuard, RolesGuard)
 @Controller('book')
 export class BookController {
   constructor(private readonly bookService: BookService) {}
@@ -28,6 +33,7 @@ export class BookController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Post()
+  @ApiBearerAuth()
   create(@Body() createBookDto: CreateBookDto) {
     return this.bookService.create(createBookDto);
   }
@@ -51,7 +57,7 @@ export class BookController {
 
   @SwagSuccessRes('function for get books by id')
   @SwagFailedRes()
-  @RolesDec()
+  @RolesDec('public')
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.bookService.findOneById(id);
@@ -61,6 +67,7 @@ export class BookController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Patch(':id')
+  @ApiBearerAuth()
   update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
     return this.bookService.update(id, updateBookDto);
   }
@@ -69,6 +76,7 @@ export class BookController {
   @SwagFailedRes()
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Delete(':id')
+  @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.bookService.remove(id);
   }
