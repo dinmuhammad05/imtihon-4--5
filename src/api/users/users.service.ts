@@ -76,8 +76,6 @@ export class UsersService extends BaseService<
     const value: any = await this.cacheManger.get(email);
     if (!value) throw new BadRequestException('email incorect or otp expired');
 
-    console.log(value, otp);
-
     if (value.otp != otp) {
       throw new BadRequestException('otp incorect or expired');
     }

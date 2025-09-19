@@ -49,12 +49,13 @@ export class BorrowService extends BaseService<
 
     try {
       const { bookId, userId } = dto;
-      console.log(user.role !== Roles.ADMIN);
 
-      if (user.role !== Roles.ADMIN)
-        throw new ForbiddenException(
-          'en:forbidden user, uz:taqiqlangan foydalanuvchi',
-        );
+      if (user.role !== Roles.ADMIN) {
+        if (user.id !== userId)
+          throw new ForbiddenException(
+            'en:forbidden user, uz:taqiqlangan foydalanuvchi',
+          );
+      }
       const existsUser = await queryRunner.manager.findOneBy(UserEntity, {
         id: userId,
       });
@@ -75,7 +76,6 @@ export class BorrowService extends BaseService<
       });
 
       if (!book) throw new NotFoundException('book not found');
-      console.log(count, '55');
 
       if (!book.available)
         throw new BadRequestException(
