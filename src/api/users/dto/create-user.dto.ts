@@ -37,7 +37,12 @@ export class CreateUserDto {
   @IsNotEmpty()
   password: string;
 
+  @ApiProperty({
+    type: 'string',
+    description: 'user role',
+    example: Roles.LIBRARIAN,
+  })
   @IsEnum(Roles)
   @IsOptional()
-  role?: Roles;
+  role: Roles;
 }

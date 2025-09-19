@@ -1,3 +1,3 @@
-import { Aplication } from "./api/app.service";
+import { Aplication } from './api/app.service';
 
-void Aplication.main()
+void Aplication.main();

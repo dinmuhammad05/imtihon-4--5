@@ -15,7 +15,7 @@ export class QueryPaginationDto {
   @ApiPropertyOptional({
     type: String,
     description: "qidirmoqchi bo'lgan fieldingiz",
-    example: 'role',
+    example: 'email',
   })
   @IsString()
   @IsOptional()

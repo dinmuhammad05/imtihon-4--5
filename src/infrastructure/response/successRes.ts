@@ -1,4 +1,4 @@
-import { ISuccessRes } from "src/common";
+import { ISuccessRes } from 'src/common';
 
 export function successRes(
   data: object,
@@ -6,7 +6,7 @@ export function successRes(
 ): ISuccessRes {
   return {
     statusCode,
-    message: 'succes',
+    message: 'en: succes. uz: muvaffaqiyatli',
     data,
   };
 }

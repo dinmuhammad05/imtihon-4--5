@@ -1,10 +1,11 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { dbConfig } from 'src/config';
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AllExceptionFilter } from 'src/infrastructure/exeption/allexeption';
 import cookieParser from 'cookie-parser';
+
+import { AppModule } from './app.module';
+import { dbConfig } from 'src/config';
+import { AllExceptionFilter } from 'src/infrastructure/exeption/allexeption';
 
 export class Aplication {
   static async main() {

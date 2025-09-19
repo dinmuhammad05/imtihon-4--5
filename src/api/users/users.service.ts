@@ -2,25 +2,30 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ILike } from 'typeorm';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { type Cache } from 'cache-manager';
+import { Response } from 'express';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseService, successRes } from 'src/infrastructure';
 import { UserEntity, type UserRepository } from 'src/core';
-import { ISuccessRes, Roles } from 'src/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { ISuccessRes } from 'src/common';
 import { CryptoService } from 'src/infrastructure/crypto';
 import { toSkipeTake } from 'src/infrastructure/lib/toSkipeTake';
-import { Any, ILike } from 'typeorm';
 import { RegistrDto } from './dto/registir.dto';
 import { IPayload } from 'src/common/interface/payload';
 import { TokenService } from 'src/infrastructure/Token';
-import { Response } from 'express';
 import { SigninDto } from './dto/signin.dto';
 import { dbConfig } from 'src/config';
+import { ConfirmOTPDto } from './dto/confirmOtp.dto';
 
 @Injectable()
 export class UsersService extends BaseService<
@@ -30,33 +35,60 @@ export class UsersService extends BaseService<
 > {
   constructor(
     @InjectRepository(UserEntity) private readonly userRepo: UserRepository,
+    @Inject(CACHE_MANAGER) private cacheManger: Cache,
     private readonly crypto: CryptoService,
     private readonly tokenService: TokenService,
   ) {
     super(userRepo);
   }
+  private generateOtp() {
+    return Math.floor(100000 + Math.random() * 900000).toString(); // 6 xonali
+  }
+
   async create(dto: CreateUserDto): Promise<ISuccessRes> {
     let { password, email } = dto;
     const existEmail = await this.userRepo.findOne({ where: { email } });
     if (existEmail) throw new ConflictException('email already exists');
 
     dto.password = await this.crypto.encrypt(password);
-
     return super.create(dto);
   }
 
-  async register(dto: RegistrDto, res: Response): Promise<ISuccessRes> {
+  async register(dto: RegistrDto): Promise<ISuccessRes> {
     let { password, email } = dto;
     const existEmail = await this.userRepo.findOne({ where: { email } });
     if (existEmail) throw new ConflictException('email already exists');
 
     dto.password = await this.crypto.encrypt(password);
     const reader = this.userRepo.create(dto);
-    const newReader = await this.userRepo.save(reader);
+    const otp = this.generateOtp();
+    await this.cacheManger.set(email, { data: reader, otp: otp });
+    return successRes({
+      url: 'api/v1/users/confirmotp',
+      expired: `${dbConfig.CACHE_TIME/1000/60}-minutes`,
+      otp,
+    });
+  }
+
+  async confirmOtp(dto: ConfirmOTPDto, res: Response) {
+    const { email, otp } = dto;
+
+    const value: any = await this.cacheManger.get(email);
+    if (!value) throw new BadRequestException('email incorect or otp expired');
+
+    console.log(value, otp);
+
+    if (value.otp != otp) {
+      throw new BadRequestException('otp incorect or expired');
+    }
+
+    await this.cacheManger.del(email);
+    const newReader = await this.userRepo.save(value.data);
     const payload: IPayload = {
       id: newReader.id,
       role: newReader.role,
     };
+
     const accestoken = await this.tokenService.accessToken(payload);
     const refreshtoken = await this.tokenService.refreshToken(payload);
     await this.tokenService.writeCookie(res, 'usertoken', refreshtoken, 30);

@@ -21,6 +21,7 @@ import {
 import { AuthGuard } from 'src/common/guard/auth.guard';
 import { RolesGuard } from 'src/common/guard/roles.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { CookieGetter } from 'src/common/decorator/cookie-getter-decorator';
 
 @UseGuards(AuthGuard, RolesGuard)
 @Controller('book-history')
@@ -36,7 +37,7 @@ export class BookHistoryController {
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Post()
   @ApiBearerAuth()
-  create(@Body() createBookHistoryDto: CreateBookHistoryDto) {
+  create(@CookieGetter('usertoken') token:string, @Body() createBookHistoryDto: CreateBookHistoryDto) {
     return this.bookHistoryService.create(createBookHistoryDto);
   }
 
@@ -46,7 +47,9 @@ export class BookHistoryController {
   @Get()
   @ApiBearerAuth()
   findAll() {
-    return this.bookHistoryService.findAll({relations:{book:true, user:true}});
+    return this.bookHistoryService.findAll({
+      relations: { book: true, user: true },
+    });
   }
 
   @SwagSuccessRes('function for get book history by id')
@@ -54,8 +57,10 @@ export class BookHistoryController {
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Get(':id')
   @ApiBearerAuth()
-  findOne(@Param('id') id: string) {
-    return this.bookHistoryService.findOneById(id, {relations:{book:true, user:true}});
+  findOne(@CookieGetter('usertoken') token: string, @Param('id') id: string) {
+    return this.bookHistoryService.findOneById(id, {
+      relations: { book: true, user: true },
+    });
   }
 
   @SwagSuccessRes('function for updating book history')
@@ -64,6 +69,7 @@ export class BookHistoryController {
   @Patch(':id')
   @ApiBearerAuth()
   update(
+    @CookieGetter('usertoken') token: string,
     @Param('id') id: string,
     @Body() updateBookHistoryDto: UpdateBookHistoryDto,
   ) {
@@ -75,7 +81,7 @@ export class BookHistoryController {
   @RolesDec(Roles.ADMIN, Roles.LIBRARIAN)
   @Delete(':id')
   @ApiBearerAuth()
-  remove(@Param('id') id: string) {
+  remove(@CookieGetter('usertoken') token: string, @Param('id') id: string) {
     return this.bookHistoryService.remove(id);
   }
 }

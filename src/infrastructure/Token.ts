@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
-import { IPayload } from 'src/common/interface/payload';
 
+import { IPayload } from 'src/common/interface/payload';
 import { dbConfig } from 'src/config';
 
 const {

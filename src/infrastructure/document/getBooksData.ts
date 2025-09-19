@@ -1,0 +1,33 @@
+export const GetBooksData = {
+  id: '22faa1bc-5fca-4ca8-9628-8662255f2636',
+  created_at: '2025-09-16T11:59:34.796Z',
+  update_at: '2025-09-16T11:59:34.796Z',
+  title: 'Baxtiyor oila',
+  author: 'Shayx Muhammad Sodiq Muhammad Yusuf',
+  published_year: 2015,
+  available: true,
+  borrows: [
+    {
+      id: '60f38b22-6bb5-4fa0-8e65-3b9d607c9e04',
+      created_at: '2025-09-16T12:18:05.269Z',
+      update_at: '2025-09-16T12:18:05.269Z',
+      borrow_date: '2025-09-16T12:18:05.269Z',
+      due_date: 1,
+      return_date: '2025-09-16T17:15:00.000Z',
+      overdue: false,
+      userId: '6f6c5467-4c03-48be-9802-b84fb97c061a',
+      bookId: '22faa1bc-5fca-4ca8-9628-8662255f2636',
+    },
+    {
+      id: 'c660ae92-099f-4470-b39c-5eda303099a0',
+      created_at: '2025-09-16T12:18:58.788Z',
+      update_at: '2025-09-16T12:18:58.788Z',
+      borrow_date: '2025-09-16T12:18:58.788Z',
+      due_date: 1,
+      return_date: '2025-09-16T17:15:00.000Z',
+      overdue: false,
+      userId: '6f6c5467-4c03-48be-9802-b84fb97c061a',
+      bookId: '22faa1bc-5fca-4ca8-9628-8662255f2636',
+    },
+  ],
+};

@@ -20,6 +20,8 @@ export class AuthGuard implements CanActivate {
       ctx.getHandler(),
       ctx.getClass(),
     ]);
+    console.log(roles);
+    
     if (roles?.includes('public')) return true;
 
     const req = ctx.switchToHttp().getRequest();

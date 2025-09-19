@@ -4,3 +4,4 @@ export * from './base/base.entity';
 
 // respons
 export * from './response/successRes';
+

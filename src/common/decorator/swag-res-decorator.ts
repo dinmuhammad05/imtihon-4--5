@@ -6,7 +6,7 @@ export function SwagSuccessRes(
   status: number = HttpStatus.OK,
   description: string = 'Successful response',
   statusCode: number = status,
-  message: string = 'success',
+  message: string = 'en:success,uz:muvaffaqiyatli',
   data: object = {},
 ) {
   return applyDecorators(
@@ -29,7 +29,7 @@ export function SwagFailedRes(
   status: number = HttpStatus.BAD_REQUEST,
   description: string = 'Failed response',
   statusCode: number = HttpStatus.BAD_REQUEST,
-  errorMessage: string = 'Some error occurred',
+  errorMessage: string = 'en: Some error occurred, uz: Xatolik yuz berdi',
 ) {
   return applyDecorators(
     ApiResponse({

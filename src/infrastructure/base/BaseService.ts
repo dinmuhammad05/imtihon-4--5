@@ -46,12 +46,15 @@ export class BaseService<CreateDto, UpdateDto, Entity extends { id: string }> {
 
   async update(id: string, dto: UpdateDto): Promise<ISuccessRes> {
     await this.findOneById(id);
-    const data = await this.repository.update(
+    await this.repository.update(
       id,
       dto as unknown as QueryDeepPartialEntity<Entity>,
     );
 
-    return successRes(data);
+    const data = await this.repository.findOne({
+      where: { id } as FindOptionsWhere<Entity>,
+    });
+    return successRes(data || {});
   }
 
   async remove(id: string): Promise<ISuccessRes> {

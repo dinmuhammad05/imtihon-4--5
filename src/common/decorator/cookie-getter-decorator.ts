@@ -1,6 +1,6 @@
 import {
+  BadRequestException,
   ExecutionContext,
-  InternalServerErrorException,
   UnauthorizedException,
   createParamDecorator,
 } from '@nestjs/common';
@@ -15,9 +15,7 @@ export const CookieGetter = createParamDecorator(
       }
       return refreshToken;
     } catch (error) {
-      throw new InternalServerErrorException(
-        `Error on reading cookie: ${error}`,
-      );
+      throw new BadRequestException(`Error on reading cookie: ${error}`);
     }
   },
 );

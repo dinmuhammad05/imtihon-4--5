@@ -14,7 +14,7 @@ export class BorrowEntity extends BaseEntity {
   @Column({ type: 'timestamp', nullable: true })
   return_date: Date;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default:false})
   overdue: Boolean;
 
   @Column({ type: 'uuid',nullable: false })

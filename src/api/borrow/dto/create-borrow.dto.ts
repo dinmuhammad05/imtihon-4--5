@@ -33,16 +33,16 @@ export class CreateBorrowDto {
   @ApiProperty({
     type: 'string',
     description: 'borrow date default date now  ',
-    example: '16.09.2025',
+    example: '2025-09-16T17:15:00.000Z',
   })
   @IsDate()
   @IsOptional()
   borrow_date?: Date;
 
   @ApiProperty({
-    type: 'string',
+    type: 'number',
     description: 'due date default date now  ',
-    example: '2025-09-16T17:15:00.000Z',
+    example: '3',
   })
   @Min(1)
   @Max(7)
